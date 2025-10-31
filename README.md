@@ -1,51 +1,92 @@
 # Waste Segregation
-> This project aims to detect fraudulent insurance claims using machine learning models, helping insurers reduce financial losses and improve operational efficiency. The process began with thorough data preprocessing and feature engineering to clean the dataset, handle missing values, and create meaningful features that capture fraud patterns. Two models—Logistic Regression and Random Forest—were developed to classify claims as either fraudulent or legitimate. To enhance model performance, hyperparameter tuning and threshold optimization were performed using cross-validation and grid search techniques. The final models were evaluated using metrics such as accuracy, precision, recall, F1-score, and AUC-ROC to ensure robustness and reliability. This end-to-end approach demonstrates how machine learning can be effectively leveraged for fraud detection in the insurance sector.
+> This project implements an image classification pipeline to sort common waste materials into categories using a convolutional neural network. The goal is to improve recycling efficiency and reduce landfill waste by automating material sorting.
 
 ## Table of Contents
 * [General Info](#general-information)
+* [Stepwise Process](#stepwise-process)
+  * [Step 1: Objective](#step-1---objective)
+  * [Step 2: Data Understanding](#step-2---data-understanding)
+  * [Step 3: Data Preparation](#step-3---data-preparation)
+  * [Step 4: Model Building and Evaluation](#step-4---model-building-and-evaluation)
+  * [Step 5: Data Augmentation (optional)](#step-5---data-augmentation-optional)
+  * [Step 6: Conclusions and Insights](#step-6---conclusions-and-insights)
 * [Technologies Used](#technologies-used)
-* [Conclusions](#conclusions)
 * [Acknowledgements](#acknowledgements)
+* [Contact](#contact)
 
 ## General Information
-> We at UPGRAD doing this Waste Segregation Case Study as a part of Model Selection.
+> This repository contains code and documentation for a convolutional neural network-based waste classification task. The solution processes image folders where each folder corresponds to one waste category and trains a classifier to predict the correct category for new images.
 
-> Global Insure, a leading insurance company, processes thousands of claims annually. However, a significant percentage of these claims turn out to be fraudulent, resulting in considerable financial losses. The company’s current process for identifying fraudulent claims involves manual inspections, which is time-consuming and inefficient. Fraudulent claims are often detected too late in the process, after the company has already paid out significant amounts. Global Insure wants to improve its fraud detection process using data-driven insights to classify claims as fraudulent or legitimate early in the approval process. This would minimise financial losses and optimise the overall claims handling process.
+## Stepwise Process
 
-## Conclusions
-> Random forest model is effective model for fraud detection. Careful preprocessing and feature selection improved model performance. This solution enables early detection of fraud, reducing financial loss and improving operational efficiency.
+### Step 1 - Objective
+- Build a reliable image classification workflow to categorize waste into classes:
+  1. Food_Waste
+  2. Metal
+  3. Paper
+  4. Plastic
+  5. Other
+  6. Cardboard
+  7. Glass
+- Deliver an end-to-end pipeline: data loading, preprocessing, training, evaluation, and optional augmentation.
 
-## Key Insights
-* Fraudulent claims often exhibit distinct patterns in terms of claim timing, incident severity, and policy details.
-* Behavioural features (e.g., insured relationship, hobbies, claim amount) are used to identify suspicious activity.
-* The most predictive features are incident_severity, insured_relationship, property_damage, incident_city and auto_make
-* Robust against overfitting and capable of handling both numerical and categorical data.
-* Feature importance from the model provided interpretable insights into fraud indicators.
-* Handling missing values, encoding categorical data, and transforming timestamps significantly boosted model performance.
-* Multicollinearity checks and RFECV helped refine the model to include only the most informative features.
+### Step 2 - Data Understanding
+- Dataset structure: one folder per class, images inside each folder.
+- Expected variations: illumination, resolution, backgrounds, partial occlusions.
+- Key task: ensure per-image label correctness and inspect class balance.
+
+### Step 3 - Data Preparation
+1. Load images from directory using a controlled loader.
+2. Convert images to consistent RGB format and normalize pixel values.
+3. Resize images to a common target size (example used: 128x128).
+4. Create a labeled dataset and verify counts per class.
+5. Encode class labels as integer indices.
+6. Split data into training and validation sets (example split: 70% train / 30% validation) with stratification to preserve class distribution.
+7. Visual checks:
+   - Plot class distribution bar chart.
+   - Display sample images from each class.
+
+### Step 4 - Model Building and Evaluation
+1. Model architecture (example used):
+   - Three convolutional blocks (Conv2D → MaxPooling → BatchNormalization).
+   - Flatten → Dense → Dropout → Output Dense with softmax for 7 classes.
+2. Compile configuration:
+   - Loss: sparse categorical crossentropy
+   - Optimizer: Adam
+   - Metric: accuracy
+3. Training:
+   - Use callbacks: EarlyStopping, ModelCheckpoint, ReduceLROnPlateau.
+   - Example: train for several epochs and restore best weights.
+4. Evaluation:
+   - Plot training and validation accuracy and loss.
+   - Report final validation accuracy and inspect confusion between classes.
+   - Save best model artifact (example: best_waste_model.keras).
+
+### Step 5 - Data Augmentation (optional)
+- Implement an augmentation pipeline (flip, rotation, zoom, brightness, etc.) to improve generalization and address class imbalance.
+- Retrain the model on augmented data and compare metrics against the base model.
+
+### Step 6 - Conclusions and Insights
+- Summarize model performance and practical observations:
+  - Most/least confused classes.
+  - Effect of augmentation on accuracy and robustness.
+  - Recommendations for production use (more data, higher resolution, domain-specific augmentation).
 
 ## Technologies Used
-  Python Coding and Visualizations
-
+- Python
+- NumPy, pandas
+- Matplotlib, Seaborn
+- Pillow (PIL)
+- TensorFlow / Keras
+- scikit-learn
 
 ## Acknowledgements
-Give credit here.
-- This project was inspired by Upgrad 
-- References if any...
-    https://matplotlib.org/stable/api/index.html
-    https://seaborn.pydata.org/examples/index.html
-
-
+- Project prepared as part of course exercises.
+- Reference documentation:
+  - https://www.tensorflow.org/
+  - https://scikit-learn.org/
+  - https://matplotlib.org/
 
 ## Contact
-### Created by 
-  * Jyothsna Devi Duggasani
-  * Bikas Sarkar 
-      
-
-
-<!-- Optional -->
-<!-- ## License -->
-<!-- This project is open source and available under the [... License](). -->
-
-<!-- You don't have to include all sections - just the one's relevant to your project -->
+### Created by  
+  * Bikas Sarkar
